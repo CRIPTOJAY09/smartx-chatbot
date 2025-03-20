@@ -8,6 +8,11 @@ app.use(express.json());
 
 const DEEPSEEK_API_KEY = process.env.DEEPSEEK_API_KEY; // Variable de entorno
 
+// Ruta raíz para evitar "Cannot GET /"
+app.get("/", (req, res) => {
+    res.send("Smarty está en línea 🚀. Para interactuar con el chatbot, envía una solicitud POST a /chat.");
+});
+
 app.post("/chat", async (req, res) => {
     const { message } = req.body;
 

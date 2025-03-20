@@ -8,31 +8,33 @@ app.use(express.json());
 
 const DEEPSEEK_API_KEY = process.env.DEEPSEEK_API_KEY; // Variable de entorno
 
-// 📌 Resumen completo de SmartX P2P para Smarty
 const SMARTX_SUMMARY = `
-SmartX P2P es una plataforma descentralizada de intercambio de criptomonedas que permite comprar y vender activos digitales sin intermediarios mediante un sistema de escrow on-chain. 
+SmartX P2P es una plataforma descentralizada de intercambio de criptomonedas, diseñada para que los usuarios compren y vendan activos digitales de manera segura sin intermediarios.
+Utiliza escrow on-chain para garantizar que los fondos solo se liberen cuando ambas partes cumplan el acuerdo.
 
-🔹 **Funciones Principales:**
-✅ Compra y venta de criptomonedas P2P con escrow on-chain.  
-✅ XPAY: Transferencias internas gratuitas entre usuarios sin comisiones.  
-✅ Generación automática de wallets para USDT (BEP-20), USDC (Polygon) y STX (BEP-20).  
-✅ KYC obligatorio para garantizar seguridad en la plataforma.  
-✅ Sistema de reputación y calificación de usuarios.  
-✅ Multilingüe: Disponible en 9 idiomas.  
-✅ Soporte 24/7 y resolución de disputas.  
-✅ Penalizaciones automáticas para cancelaciones abusivas.  
+🛠️ Funciones principales:
+- Compra y venta de criptomonedas con escrow on-chain.
+- XPAY: transferencias internas gratuitas sin comisiones.
+- Generación automática de wallets para USDT (BEP-20), USDC (Polygon) y STX (BEP-20).
+- KYC obligatorio para garantizar seguridad en la plataforma.
+- Sistema de reputación y calificación de usuarios.
+- Soporte 24/7 y sistema de disputas.
 
-💎 **Token SmartX ($STX):**  
-✅ Pago de comisiones con descuento del 20% en STX.  
-✅ Recompensas y sistema de staking en Q3 2025.  
-✅ Seguridad avanzada con autenticación biométrica y cifrado AES-256.  
+💎 Token SmartX ($STX):
+- Permite descuentos en comisiones y será usado para staking y recompensas.
+- Tokenomics con suministro definido y verificado en blockchain.
 
-📅 **Roadmap:**  
-🚀 Q2 2025 → Lanzamiento con funciones clave.  
-🚀 Q3 2025 → Staking y expansión de pagos.  
-🚀 Q4 2025 → Integración con DeFi y préstamos colateralizados.  
+🔐 Seguridad:
+- Autenticación biométrica y PIN de seguridad.
+- Cifrado AES-256 para claves privadas.
+- Monitoreo de actividad sospechosa.
 
-SmartX P2P busca ser la referencia en comercio P2P cripto con escrow seguro y un ecosistema descentralizado eficiente.
+📅 Roadmap:
+- Q2 2025: Lanzamiento con funciones principales.
+- Q3 2025: Implementación de staking y nuevos métodos de pago.
+- Q4 2025: Integración con DeFi y préstamos colateralizados.
+
+SmartX P2P busca ser el mercado P2P más seguro y eficiente del ecosistema cripto.
 `;
 
 app.post("/chat", async (req, res) => {
@@ -44,10 +46,10 @@ app.post("/chat", async (req, res) => {
             {
                 model: "deepseek-chat",
                 messages: [
-                    { role: "system", content: `Eres Smarty, el asistente de SmartX P2P. Responde todas las preguntas usando la siguiente información:\n\n${SMARTX_SUMMARY}` },
+                    { role: "system", content: `Eres Smarty, el asistente de SmartX P2P. Usa la siguiente información para responder: ${SMARTX_SUMMARY}` },
                     { role: "user", content: message }
                 ],
-                max_tokens: 200
+                max_tokens: 150
             },
             {
                 headers: {

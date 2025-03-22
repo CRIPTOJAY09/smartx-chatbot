@@ -8,12 +8,41 @@ app.use(express.json());
 
 const DEEPSEEK_API_KEY = process.env.DEEPSEEK_API_KEY;
 
-const SMARTX_SUMMARY = `
-SmartX P2P es una plataforma descentralizada para comprar y vender criptomonedas usando escrow on-chain. 
-Integra XPAY (transferencias internas sin comisiones), wallets automáticas para USDT, USDC y STX, y verificación KYC obligatoria. 
-El token $STX ofrece descuentos en comisiones (0.30%), beneficios premium y recompensas por staking. 
-Disponible en 10 idiomas, incluye reputación de usuarios, autenticación biométrica, PIN de seguridad, y soporte 24/7 con sistema de disputas. 
-SmartX P2P planea integrar DeFi, préstamos y una versión avanzada con IA para finales de 2025.
+// 🧠 Resumen oficial cargado en memoria
+const resumenSmartX = `
+SmartX P2P es una plataforma descentralizada de intercambio de criptomonedas, diseñada para que los usuarios puedan comprar y vender activos digitales de manera segura sin intermediarios. Utiliza escrow on-chain, asegurando que los fondos solo se liberen cuando ambas partes cumplen con el acuerdo.
+
+Funciones principales:
+- Compra y venta de cripto P2P con escrow on-chain.
+- XPAY: transferencias internas gratuitas entre usuarios.
+- Generación automática de wallets para USDT (BEP-20), USDC (Polygon) y STX (BEP-20).
+- KYC obligatorio.
+- Sistema de reputación.
+- Soporte multilingüe (Español, Inglés, Árabe, Portugués, Francés, Alemán, Ruso, Chino, Italiano).
+- Modo claro/oscuro y diseño responsive.
+- Soporte 24/7 y sistema de disputas.
+
+Token $STX:
+- Token nativo de la plataforma SmartX P2P.
+- Usos:
+  - Descuento del 20% en comisiones si se paga con STX.
+  - Método de pago interno y futuro sistema de staking.
+  - Recompensas para usuarios activos y comerciantes frecuentes.
+- Tokenomics:
+  - Suministro total definido en contrato.
+  - Parte reservada para desarrollo y recompensas.
+
+Seguridad:
+- Escrow on-chain en BNB Smart Chain y Polygon.
+- PIN de seguridad, autenticación biométrica, monitoreo de actividad, y cifrado AES-256.
+
+Roadmap:
+- Q2: Lanzamiento oficial, XPAY, wallets automáticas.
+- Q3: Staking, soporte de nuevos tokens.
+- Q4: DeFi, préstamos con colateral STX, IA para trading.
+
+Conclusión:
+SmartX P2P es más que un simple exchange P2P, es un ecosistema financiero completo para operar con seguridad, eficiencia y bajos costos. Es ideal tanto para usuarios novatos como para traders expertos.
 `;
 
 app.post("/chat", async (req, res) => {
@@ -27,14 +56,18 @@ app.post("/chat", async (req, res) => {
         messages: [
           {
             role: "system",
-            content: `Responde como Smarty, el asistente oficial de SmartX P2P. Usa el siguiente contexto para responder preguntas:\n\n${SMARTX_SUMMARY}`
+            content: "Eres Smarty, el asistente oficial de SmartX P2P. Responde con claridad, simpatía y precisión."
+          },
+          {
+            role: "system",
+            content: resumenSmartX
           },
           {
             role: "user",
             content: message
           }
         ],
-        max_tokens: 400
+        max_tokens: 200
       },
       {
         headers: {
@@ -44,23 +77,17 @@ app.post("/chat", async (req, res) => {
       }
     );
 
-    const reply = response?.data?.choices?.[0]?.message?.content;
-
-    if (!reply) {
-      return res.status(500).json({ reply: "Smarty no pudo procesar tu mensaje correctamente." });
-    }
-
-    res.json({ reply });
+    res.json({ reply: response.data.choices[0].message.content });
   } catch (error) {
-    console.error("Error con DeepSeek API:", error?.response?.data || error.message);
-    res.status(500).json({ reply: "Ocurrió un error. Por favor intenta nuevamente más tarde." });
+    console.error("❌ Error con DeepSeek API:", error?.response?.data || error.message);
+    res.status(500).json({ reply: "Lo siento, no puedo responder en este momento. Intenta más tarde." });
   }
 });
 
 const PORT = process.env.PORT || 3000;
 app.get("/", (req, res) => {
-  res.send("✅ Smarty está en línea. Usa POST a /chat para interactuar.");
+  res.send("✅ Smarty está en línea 🚀. Para interactuar con el chatbot, envía una solicitud POST a /chat.");
 });
 app.listen(PORT, () => {
-  console.log(`✅ Servidor corriendo en el puerto ${PORT}`);
+  console.log(`🟢 Servidor corriendo en el puerto ${PORT}`);
 });

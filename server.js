@@ -6,9 +6,8 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-const DEEPSEEK_API_KEY = process.env.DEEPSEEK_API_KEY;
+const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
 
-// 🧠 Resumen oficial cargado en memoria
 const resumenSmartX = `
 SmartX P2P es una plataforma descentralizada de intercambio de criptomonedas, diseñada para que los usuarios puedan comprar y vender activos digitales de manera segura sin intermediarios. Utiliza escrow on-chain, asegurando que los fondos solo se liberen cuando ambas partes cumplen con el acuerdo.
 
@@ -50,13 +49,13 @@ app.post("/chat", async (req, res) => {
 
   try {
     const response = await axios.post(
-      "https://api.deepseek.com/v1/chat/completions",
+      "https://api.openai.com/v1/chat/completions",
       {
-        model: "deepseek-chat",
+        model: "gpt-3.5-turbo",
         messages: [
           {
             role: "system",
-            content: "Eres Smarty, el asistente oficial de SmartX P2P. Responde con claridad, simpatía y precisión."
+            content: "Eres Smarty, el asistente oficial de SmartX P2P. Sé claro, preciso y amable al responder."
           },
           {
             role: "system",
@@ -67,27 +66,28 @@ app.post("/chat", async (req, res) => {
             content: message
           }
         ],
-        max_tokens: 200
+        max_tokens: 300,
+        temperature: 0.7
       },
       {
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${DEEPSEEK_API_KEY}`
+          Authorization: `Bearer ${OPENAI_API_KEY}`
         }
       }
     );
 
     res.json({ reply: response.data.choices[0].message.content });
   } catch (error) {
-    console.error("❌ Error con DeepSeek API:", error?.response?.data || error.message);
+    console.error("❌ Error con OpenAI API:", error?.response?.data || error.message);
     res.status(500).json({ reply: "Lo siento, no puedo responder en este momento. Intenta más tarde." });
   }
 });
 
 const PORT = process.env.PORT || 3000;
 app.get("/", (req, res) => {
-  res.send("✅ Smarty está en línea 🚀. Para interactuar con el chatbot, envía una solicitud POST a /chat.");
+  res.send("✅ Smarty (OpenAI) está en línea 🚀. Usa POST a /chat para interactuar.");
 });
 app.listen(PORT, () => {
-  console.log(`🟢 Servidor corriendo en el puerto ${PORT}`);
+  console.log(`🟢 Servidor activo en el puerto ${PORT}`);
 });
